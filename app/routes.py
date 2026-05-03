@@ -4,6 +4,7 @@ from flask_login import login_user, current_user
 from app.forms import LoginForm, RegisterForm
 from app.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 
 @app.route('/')
@@ -42,7 +43,8 @@ def register():
             mongo.db.users.insert_one({
                 "username": form.username.data,
                 "email": form.email.data,
-                "password_hash": hashed_password
+                "password_hash": hashed_password,
+                "created_at": datetime.now().strftime('%c')
             })
             flash('Account created successfully! Please log in.')
             return redirect(url_for('login'))

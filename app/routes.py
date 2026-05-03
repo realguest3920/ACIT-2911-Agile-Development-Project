@@ -18,7 +18,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user_data = mongo.db.users.find_one({"username": form.username.data})
-
+    
         if user_data and check_password_hash(user_data['password_hash'], form.password.data):
             user_obj = User(user_data)
             login_user(user_obj, remember=form.remember.data)
@@ -32,14 +32,19 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         existing_user = mongo.db.users.find_one({"username": form.username.data})
-        if existing_user is None:
+        emailcheck = mongo.db.email.find_one({"email": form.username.data})
+        if existing_user:
+            flash('Username already exists')
+        elif emailcheck:
+            flash('Email already registered')
+        else:
             hashed_password = generate_password_hash(form.password.data)
             mongo.db.users.insert_one({
-                    "username": form.username.data,
-                    "password_hash": hashed_password
-                })
+                "username": form.username.data,
+                "email": form.email.data,
+                "password_hash": hashed_password
+            })
             flash('Account created successfully! Please log in.')
             return redirect(url_for('login'))
-        else:
-            flash('Username already exists')
+
     return render_template('register.html', title='Register', form=form)

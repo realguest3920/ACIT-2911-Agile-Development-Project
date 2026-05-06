@@ -1,5 +1,9 @@
 # PATCHLOG:
 
+## May 6th 2026 (Jeremy)
+
+- Fixed Get_Listing route
+
 ## May 6th 2026 (Cody)
 
 - Added update_Listing route

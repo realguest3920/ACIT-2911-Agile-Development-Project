@@ -18,6 +18,9 @@ def show_all_listings() :
         tempDict = {
             "title": "?",
             "creator": "?",
+            "price": "?",
+            "condition": "?",
+            "image": "?",
             "description": "?",
             "views": "?",
             "likes": "?",
@@ -52,6 +55,9 @@ def create_Listing() :
     tempDict = {
         "title": "?",
         "creator": "?",
+        "price": "?",
+        "condition": "?",
+        "image": "?",
         "description": "?",
         "views": "?",
         "likes": "?",
@@ -66,3 +72,32 @@ def create_Listing() :
     listingsDB.insert_one(tempDict)
 
     return tempDict
+
+#Update a listing
+@api_bp.route("/listings/update/<int:item_id>", methods=["PUT"])
+def update_Listing(item_id) :
+    listingsDB = maindb["Listings"]
+    data = request.get_json()
+
+    listing = listingsDB.find_one({"_id" : item_id})
+    if listing:
+        print(f"Found {item_id} in the database!")
+        for key in data.keys() :
+            if key in listing.keys() :
+                listing[key] = data[key]
+        listingsDB.update_one({"_id" : item_id}, {"$set" : listing})
+        return listing
+    else :
+        return {"error": "listing does not exist"}, 404
+
+#Delete a listing
+@api_bp.route("/listings/delete/<int:item_id>", methods=["DELETE"])
+def delete_Listing(item_id) :
+    listingsDB = maindb["Listings"]
+    
+    listing_exists = listingsDB.find_one({"_id" : item_id})
+    if listing_exists :
+        listingsDB.delete_one({"_id" : item_id})
+        return {"success": "listing deleted"}, 200
+    else:
+        return {"error": "listing does not exist"}, 404

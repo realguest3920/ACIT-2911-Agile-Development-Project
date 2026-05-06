@@ -39,7 +39,7 @@ def show_all_listings() :
 @api_bp.route("/listings/<int:item_id>", methods=["GET"])
 def get_Listing(item_id) :
     listingsDB = maindb["Listings"]
-    listing = listingsDB.find({"_id" : item_id})
+    listing = listingsDB.find_one({"_id" : item_id})
     if listing :
         print(f"Found {item_id} in the database!")
         return listing

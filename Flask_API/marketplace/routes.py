@@ -28,7 +28,7 @@ def status():
 
 @api_bp.route("/listings", methods=["GET"])
 def show_all_listings() :
-    listingsDB = current_app.mongo["Listings"].find()
+    listingsDB = maindb["Listings"].find()
     items = []
     for doc in listingsDB :
         items.append(doc) #This runs under the assumption that all data is correct
@@ -38,7 +38,7 @@ def show_all_listings() :
 #Get a specific listing
 @api_bp.route("/listings/<int:item_id>", methods=["GET"])
 def get_Listing(item_id) :
-    listingsDB = current_app.mongo["Listings"]
+    listingsDB = maindb["Listings"]
     listing = listingsDB.find_one({"_id" : item_id})
     if listing :
         print(f"Found {item_id} in the database!")
@@ -49,7 +49,7 @@ def get_Listing(item_id) :
 #Create a new listing
 @api_bp.route("/listings/create", methods=["POST"])
 def create_Listing() :
-    listingsDB = current_app.mongo["Listings"]
+    listingsDB = maindb["Listings"]
     data = request.get_json()
 
     title = data.get("title")
@@ -88,7 +88,7 @@ def create_Listing() :
 #Update a listing
 @api_bp.route("/listings/update/<int:item_id>", methods=["PUT"])
 def update_Listing(item_id) :
-    listingsDB = current_app.mongo["Listings"]
+    listingsDB = maindb["Listings"]
     data = request.get_json()
 
     listing = listingsDB.find_one({"_id" : item_id})
@@ -107,7 +107,7 @@ def update_Listing(item_id) :
 #Delete a listing
 @api_bp.route("/listings/delete/<int:item_id>", methods=["DELETE"])
 def delete_Listing(item_id) :
-    listingsDB = current_app.mongo["Listings"]
+    listingsDB = maindb["Listings"]
     
     listing_exists = listingsDB.find_one({"_id" : item_id})
     if listing_exists :

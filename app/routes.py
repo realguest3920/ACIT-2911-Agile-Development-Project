@@ -83,7 +83,7 @@ def confirm_email(token):
         return "verifaction expired", 400
     
     flash("Email confirmed")
-    mongo.db.users.update_one({"email": email}, {"$set": {"confirmed": True}})
+    mongo["users"].update_one({"email": email}, {"$set": {"confirmed": True}})
     return "successfully verified email"
 
 

@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from config import Config
+from app import app, mongo
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 mail = Mail(app)

@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from config import Config
+from app import app, mongo
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 mail = Mail(app)
@@ -81,7 +83,7 @@ def confirm_email(token):
         return "verifaction expired", 400
     
     flash("Email confirmed")
-    mongo.db.users.update_one({"email": email}, {"$set": {"confirmed": True}})
+    mongo["users"].update_one({"email": email}, {"$set": {"confirmed": True}})
     return "successfully verified email"
 
 

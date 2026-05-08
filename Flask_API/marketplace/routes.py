@@ -3,8 +3,25 @@ from datetime import datetime
 from flask import current_app, jsonify, request
 from . import api_bp
 
-MongoDBURL = "mongodb+srv://realguest_db_user:eHr283CHww8nLCwG@cluster0.qivfiwd.mongodb.net/"
-maindb = pymongo.MongoClient(MongoDBURL)["AgileDevelopment"]
+mongoDBURL = "mongodb+srv://realguest_db_user:eHr283CHww8nLCwG@cluster0.qivfiwd.mongodb.net/"
+mongoClient = pymongo.MongoClient(mongoDBURL)
+maindb = mongoClient["AgileDevelopment"]
+
+def FindFirstNumber(dict) :
+    minNum = 0
+    ids = []
+    for i in dict :
+        if isinstance(i["_id"], int) :
+            ids.append(i["_id"])
+    
+    ids.sort()
+
+    for i in ids :
+        if minNum == i :
+            minNum += 1
+        else :
+            return minNum
+    return minNum
 
 @api_bp.route("/status", methods=["GET"])
 def status():
@@ -15,24 +32,8 @@ def show_all_listings() :
     listingsDB = maindb["Listings"].find()
     items = []
     for doc in listingsDB :
-        tempDict = {
-            "title": "?",
-            "creator": "?",
-            "price": "?",
-            "condition": "?",
-            "image": "?",
-            "description": "?",
-            "views": "?",
-            "likes": "?",
-            "created_on": "?"
-        }
-
-        dockeys = doc.keys()
-        for key in tempDict.keys() :
-            if key in dockeys :
-                tempDict[key] = doc[key]
-        
-        items.append(tempDict)
+        items.append(doc) #This runs under the assumption that all data is correct
+    
     return items, 200
 
 #Get a specific listing
@@ -52,26 +53,38 @@ def create_Listing() :
     listingsDB = maindb["Listings"]
     data = request.get_json()
 
-    tempDict = {
-        "title": "?",
-        "creator": "?",
-        "price": "?",
-        "condition": "?",
-        "image": "?",
-        "description": "?",
-        "views": "?",
-        "likes": "?",
-        "created_on": datetime.now()
-    }
+    title = data.get("title")
+    creator = data.get("creator")
+    price = data.get("price")
+    condition = data.get("condition")
+    description = data.get("description")
+    if not title :
+        return {"error" : "Missing required field: <title>"}, 400
+    elif not creator :
+        return {"error" : "Missing required field: <creator>"}, 400
+    elif not price :
+        return {"error" : "Missing required field: <price>"}, 400
+    elif not condition :
+        return {"error" : "Missing required field: <condition>"}, 400
+    elif not description :
+        return {"error" : "Missing required field: <description>"}, 400
+    else :
+        tempDict = {
+            "_id": FindFirstNumber(listingsDB.find({}, {"_id": 1})),
+            "title": title,
+            "creator": creator,
+            "price": price,
+            "condition": condition,
+            "description": description,
+            "imgurl": "?",
+            "views": 0,
+            "likes": 0,
+            "created_on": datetime.now()
+        }
+        listingsDB.insert_one(tempDict)
 
-    dockeys = data.keys()
-    for key in tempDict.keys() :
-        if key in dockeys :
-            tempDict[key] = data[key]
+        return tempDict, 201
     
-    listingsDB.insert_one(tempDict)
-
-    return tempDict
 
 #Update a listing
 @api_bp.route("/listings/update/<int:item_id>", methods=["PUT"])
@@ -85,6 +98,8 @@ def update_Listing(item_id) :
         for key in data.keys() :
             if key in listing.keys() :
                 listing[key] = data[key]
+            else :
+                return {"error": "One or more invalid Parameters"}, 400
         listingsDB.update_one({"_id" : item_id}, {"$set" : listing})
         return listing
     else :
@@ -101,3 +116,4 @@ def delete_Listing(item_id) :
         return {"success": "listing deleted"}, 200
     else:
         return {"error": "listing does not exist"}, 404
+    

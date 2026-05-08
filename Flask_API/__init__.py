@@ -1,17 +1,12 @@
+import os
 import pymongo
-from flask import Flask, render_template
+from app import app as web_app
 from .marketplace import api_bp
 
 MongoDBURL = "mongodb+srv://realguest_db_user:eHr283CHww8nLCwG@cluster0.qivfiwd.mongodb.net/"
 maindb = pymongo.MongoClient(MongoDBURL)["AgileDevelopment"]
 
 def create_app():
-    app = Flask(__name__, template_folder="../templates")
-    app.register_blueprint(api_bp)
-
-    @app.route("/")
-    def index() :
-        listings = list(maindb["Listings"].find())
-        return render_template("index.html", listings=listings)
-
-    return app
+    if "marketplace" not in web_app.blueprints:
+        web_app.register_blueprint(api_bp)
+    return web_app

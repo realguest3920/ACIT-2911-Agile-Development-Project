@@ -2,7 +2,7 @@ from Flask_API import create_app
 
 def main() :
     app = create_app()
-    app.run()
+    app.run(debug=True)
 
 if __name__ == "__main__" :
     main()

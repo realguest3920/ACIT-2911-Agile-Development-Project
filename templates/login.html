@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="\static\styles.css">
+</head>
+<body>
+    <header class="site-header">
+      <div class="header-container">
+        <h1>Marketplace</h1>
+
+        <nav class="navbar">
+          <ul>
+            <li><a href="/">Listings</a></li>
+            <li>About</li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <h1>Sign In</h1>
+    <form action="" method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <p>
+        {{ form.username.label }}/Email <br />
+        {{ form.username(size=32) }} {% for error in form.username.errors %}
+        <span style="color: red"> [{{ error }} ]</span>
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.password.label }} <br />
+        {{ form.password(size=32) }} {% for error in form.password.errors %}
+        <span style="color: red"> [{{ error }} ] </span>
+        {% endfor %}
+      </p>
+      <p>{{ form.remember() }} {{ form.remember.label }}</p>
+      <p>{{ form.submit() }}</p>
+    </form>
+  </body>
+</html>

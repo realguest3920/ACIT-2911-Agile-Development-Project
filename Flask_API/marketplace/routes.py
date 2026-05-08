@@ -2,10 +2,9 @@ import pymongo
 from datetime import datetime
 from flask import current_app, jsonify, request
 from . import api_bp
+from app import mongo
 
-mongoDBURL = "mongodb+srv://realguest_db_user:eHr283CHww8nLCwG@cluster0.qivfiwd.mongodb.net/"
-mongoClient = pymongo.MongoClient(mongoDBURL)
-maindb = mongoClient["AgileDevelopment"]
+maindb = mongo
 
 def FindFirstNumber(dict) :
     minNum = 0
@@ -29,7 +28,7 @@ def status():
 
 @api_bp.route("/listings", methods=["GET"])
 def show_all_listings() :
-    listingsDB = maindb["Listings"].find()
+    listingsDB = current_app.mongo["Listings"].find()
     items = []
     for doc in listingsDB :
         items.append(doc) #This runs under the assumption that all data is correct
@@ -39,7 +38,7 @@ def show_all_listings() :
 #Get a specific listing
 @api_bp.route("/listings/<int:item_id>", methods=["GET"])
 def get_Listing(item_id) :
-    listingsDB = maindb["Listings"]
+    listingsDB = current_app.mongo["Listings"]
     listing = listingsDB.find_one({"_id" : item_id})
     if listing :
         print(f"Found {item_id} in the database!")
@@ -50,7 +49,7 @@ def get_Listing(item_id) :
 #Create a new listing
 @api_bp.route("/listings/create", methods=["POST"])
 def create_Listing() :
-    listingsDB = maindb["Listings"]
+    listingsDB = current_app.mongo["Listings"]
     data = request.get_json()
 
     title = data.get("title")
@@ -89,7 +88,7 @@ def create_Listing() :
 #Update a listing
 @api_bp.route("/listings/update/<int:item_id>", methods=["PUT"])
 def update_Listing(item_id) :
-    listingsDB = maindb["Listings"]
+    listingsDB = current_app.mongo["Listings"]
     data = request.get_json()
 
     listing = listingsDB.find_one({"_id" : item_id})
@@ -108,7 +107,7 @@ def update_Listing(item_id) :
 #Delete a listing
 @api_bp.route("/listings/delete/<int:item_id>", methods=["DELETE"])
 def delete_Listing(item_id) :
-    listingsDB = maindb["Listings"]
+    listingsDB = current_app.mongo["Listings"]
     
     listing_exists = listingsDB.find_one({"_id" : item_id})
     if listing_exists :

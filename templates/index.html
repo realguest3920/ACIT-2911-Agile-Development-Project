@@ -38,16 +38,18 @@
     <main class="main-content">
       <section class="card-grid">
         {% for listing in listings %}
-        <div class="card">
-          <div class="card-img">
-            <img src="images/nike-sneakers.jpg" alt="Product Image" />
-          </div>
+        <a href="{{ url_for('listing', item_id=listing._id) }}">
+          <div class="card">
+            <div class="card-img">
+              <img src="images/nike-sneakers.jpg" alt="Product Image" />
+            </div>
 
-          <div class="card-content">
-            <div class="price">${{ listing.price }}</div>
-            <h3 class="title">{{ listing.title }} - {{ listing.condition }}</h3>
+            <div class="card-content">
+              <div class="price">${{ listing.price }}</div>
+              <h3 class="title">{{ listing.title }} - {{ listing.condition }}</h3>
+            </div>
           </div>
-        </div>
+        </a>
         {% endfor %}
       </section>
     </main>

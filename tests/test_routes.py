@@ -1,12 +1,11 @@
 import pytest
 import pymongo
 import mongomock
-from Flask_API import create_app
-from Flask_API.marketplace import routes
+from app import app
+from app import routes
 
 @pytest.fixture
 def flask_app(tmp_path):
-    app = create_app()
     app.config["TESTING"] = True
     return app
 

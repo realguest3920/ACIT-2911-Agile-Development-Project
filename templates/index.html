@@ -21,6 +21,18 @@
 
         <nav class="navbar">
           <ul>
+            <li>
+              <div id="create-button">
+                <a href="{{ url_for('show_create_form') }}">
+                  <button
+                    type="button"
+                    style="padding: 10px 20px; cursor: pointer"
+                  >
+                    Create
+                  </button>
+                </a>
+              </div>
+            </li>
             <li><a href="/">Listings</a></li>
             <li>About</li>
             <li>
@@ -34,14 +46,6 @@
         </nav>
       </div>
     </header>
-
-    <div id="create-section">
-      <a href="{{ url_for('show_create_form') }}">
-        <button type="button" style="padding: 10px 20px; cursor: pointer">
-          + Create New Listing
-        </button>
-      </a>
-    </div>
 
     <main class="main-content">
       <section class="card-grid">

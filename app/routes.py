@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Mail, Message
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -213,12 +213,19 @@ def update_listing(item_id):
     return {"error": "listing does not exist"}, 404
 
 
-@api_bp.route("/listings/delete/<int:item_id>", methods=["DELETE"])
+@api_bp.route("/listings/delete/<int:item_id>", methods=["POST"])
 def delete_listing(item_id):
     listings_db = maindb["Listings"]
-    listing_exists = listings_db.find_one({"_id": item_id})
-    if listing_exists:
-        listings_db.delete_one({"_id": item_id})
-        return {"success": "listing deleted"}, 200
+    listing = listings_db.find_one({"_id": item_id})
+    
+    if listing:
+        # Check if current_user.username (from flask_login) matches the creator string
+        if current_user.is_authenticated and listing.get('creator') == current_user.username:
+            listings_db.delete_one({"_id": item_id})
+            flash("Listing deleted successfully!")
+        else:
+            flash("You are not authorized to delete this.")
+    else:
+        flash("Listing not found.")
 
-    return {"error": "listing does not exist"}, 404
+    return redirect(url_for("index"))

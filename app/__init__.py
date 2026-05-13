@@ -15,3 +15,4 @@ app.mongo = mongo
 login = LoginManager(app)
 login.login_view = 'login'
 from app import routes
+app.register_blueprint(routes.api_bp)

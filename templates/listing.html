@@ -40,7 +40,7 @@
         <section class="image-viewer">
             <div class="main-image-container">
                 <!-- Replace with dynamic src if you have multiple images -->
-                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="{{ listing.title }}">
+                <img src="{{ listing.imgurl }}">
             </div>
             <a href="/" class="close-btn">✕</a>
         </section>

@@ -41,6 +41,10 @@ def index():
     listings = list(mongo["Listings"].find())
     return render_template("index.html", listings=listings)
 
+@app.route("/create")
+def show_create_form():
+    return render_template("create_post.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

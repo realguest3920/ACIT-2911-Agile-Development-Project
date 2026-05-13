@@ -35,48 +35,12 @@
       </div>
     </header>
 
-    <div
-      id="create-section"
-      style="border: 1px solid #ccc; padding: 20px; margin-bottom: 20px"
-    >
-      <h2>List an Item</h2>
-      <form id="listingForm">
-        <input
-          type="text"
-          id="title"
-          placeholder="Item Name"
-          required
-        /><br /><br />
-        <input
-          type="text"
-          id="creator"
-          placeholder="Seller Name"
-          required
-        /><br /><br />
-        <input
-          type="number"
-          id="price"
-          placeholder="Price"
-          required
-        /><br /><br />
-
-        <select id="condition" required>
-          <option value="">--Select Condition--</option>
-          <option value="New">New</option>
-          <option value="Used">Used</option>
-          <option value="Refurbished">Refurbished</option></select
-        ><br /><br />
-
-        <textarea
-          id="description"
-          placeholder="Item Description"
-          required
-        ></textarea
-        ><br /><br />
-
-        <button type="submit">Create Listing</button>
-      </form>
-      <p id="responseMessage"></p>
+    <div id="create-section">
+      <a href="{{ url_for('show_create_form') }}">
+        <button type="button" style="padding: 10px 20px; cursor: pointer">
+          + Create New Listing
+        </button>
+      </a>
     </div>
 
     <main class="main-content">
@@ -95,59 +59,5 @@
         {% endfor %}
       </section>
     </main>
-    <script>
-      document
-        .getElementById("listingForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault(); // Prevents the default HTML form submission
-
-          const messageDiv = document.getElementById("responseMessage");
-
-          // 1. Package the data into a JSON object
-          const payload = {
-            title: document.getElementById("title").value,
-            creator: document.getElementById("creator").value,
-            price: parseFloat(document.getElementById("price").value), // Convert to number
-            condition: document.getElementById("condition").value,
-            description: document.getElementById("description").value,
-          };
-
-          try {
-            // 2. Send the POST request to your Marketplace Blueprint
-            // url_for uses 'marketplace' because that is your blueprint name
-            const response = await fetch(
-              "{{ url_for('marketplace.create_listing') }}",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-              },
-            );
-
-            const result = await response.json();
-
-            // 3. Handle the response from Python
-            if (response.ok) {
-              messageDiv.style.color = "green";
-              messageDiv.innerText = "Success! Listing created.";
-              document.getElementById("listingForm").reset(); // Clear the form
-
-              // Optional: Refresh after 1 second to show the new item in the list
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
-            } else {
-              messageDiv.style.color = "red";
-              messageDiv.innerText =
-                "Error: " + (result.error || "Something went wrong");
-            }
-          } catch (err) {
-            console.error("Fetch Error:", err);
-            messageDiv.innerText = "Could not connect to the server.";
-          }
-        });
-    </script>
   </body>
 </html>

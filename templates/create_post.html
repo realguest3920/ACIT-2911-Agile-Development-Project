@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create New Listing</title>
+  </head>
+  <body>
+    <h1>Create a New Listing</h1>
+
+    <form id="listingForm">
+      <input
+        type="text"
+        id="title"
+        placeholder="Item Name"
+        required
+      /><br /><br />
+      <input
+        type="text"
+        id="creator"
+        placeholder="Seller Name"
+        required
+      /><br /><br />
+      <input
+        type="number"
+        id="price"
+        placeholder="Price"
+        required
+      /><br /><br />
+
+      <select id="condition" required>
+        <option value="">--Select Condition--</option>
+        <option value="New">New</option>
+        <option value="Used">Used</option></select
+      ><br /><br />
+
+      <textarea
+        id="description"
+        placeholder="Item Description"
+        required
+      ></textarea
+      ><br /><br />
+
+      <button type="submit">Create Listing</button>
+      <a href="{{ url_for('index') }}">Cancel</a>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+      document
+        .getElementById("listingForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const payload = {
+            title: document.getElementById("title").value,
+            creator: document.getElementById("creator").value,
+            price: parseFloat(document.getElementById("price").value),
+            condition: document.getElementById("condition").value,
+            description: document.getElementById("description").value,
+          };
+
+          const response = await fetch(
+            "{{ url_for('marketplace.create_listing') }}",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            },
+          );
+
+          if (response.ok) {
+            // Success! Redirect the user back to the index page
+            window.location.href = "{{ url_for('index') }}";
+          } else {
+            const result = await response.json();
+            document.getElementById("responseMessage").innerText =
+              "Error: " + result.error;
+          }
+        });
+    </script>
+  </body>
+</html>

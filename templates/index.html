@@ -22,11 +22,13 @@
         <nav class="navbar">
           <ul>
             <li>
+              {% if current_user.is_authenticated %}
               <div class="button-wrapper">
                 <a href="{{ url_for('show_create_form') }}">
                   <button type="button" class="btn-create">Create</button>
                 </a>
               </div>
+              {% endif %}
             </li>
             <li><a href="/">Listings</a></li>
             <li>About</li>

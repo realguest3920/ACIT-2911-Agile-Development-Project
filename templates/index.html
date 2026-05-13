@@ -35,14 +35,21 @@
       </div>
     </header>
 
+    <div id="create-section">
+      <a href="{{ url_for('show_create_form') }}">
+        <button type="button" style="padding: 10px 20px; cursor: pointer">
+          + Create New Listing
+        </button>
+      </a>
+    </div>
+
     <main class="main-content">
       <section class="card-grid">
         {% for listing in listings %}
-        <a href="{{ url_for('listing', item_id=listing._id) }}">
-          <div class="card">
-            <div class="card-img">
-              <img src="images/nike-sneakers.jpg" alt="Product Image" />
-            </div>
+        <div class="card">
+          <div class="card-img">
+            <img src="images/nike-sneakers.jpg" alt="Product Image" />
+          </div>
 
             <div class="card-content">
               <div class="price">${{ listing.price }}</div>

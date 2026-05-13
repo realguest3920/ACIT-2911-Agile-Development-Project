@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create New Listing</title>
+    <h1>Create a New Listing</h1>
+
+    <form action="{{ url_for('marketplace.create_listing') }}" method="post" enctype="multipart/form-data">
+      <label for="title">Item Name</label><br />
+      <input type="text" id="title" name="title" placeholder="Item Name" required /><br /><br />
+
+      <label for="creator">Seller Name</label><br />
+      <input type="text" id="creator" name="creator" placeholder="Seller Name" required /><br /><br />
+
+      <label for="price">Price</label><br />
+      <input type="number" id="price" name="price" placeholder="Price" required step="0.01" /><br /><br />
+
+      <label for="condition">Condition</label><br />
+      <select id="condition" name="condition" required>
+        <option value="">--Select Condition--</option>
+        <option value="New">New</option>
+        <option value="Used">Used</option>
+      </select>
+      <br /><br />
+
+      <label for="description">Description</label><br />
+      <textarea id="description" name="description" placeholder="Item Description" required></textarea>
+      <br /><br />
+
+      <label for="imageUpload">Select an image (optional)</label><br />
+      <input type="file" id="imageUpload" name="imageUpload" accept="image/*" /><br /><br />
+
+      <button type="submit">Create Listing</button>
+      <a href="{{ url_for('index') }}">Cancel</a>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <!-- No-JavaScript form: submits directly to the server -->
+        id="description"

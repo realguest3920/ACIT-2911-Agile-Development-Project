@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="\static\styles.css" />
+  </head>
+  <body class="listing-page">
+    <header class="site-header">
+      <div class="header-container">
+        <h1>Marketplace</h1>
+
+        <nav class="navbar">
+          <ul>
+            <li><a href="/">Listings</a></li>
+            <li>About</li>
+            <li>
+              {% if current_user.is_authenticated %}
+              <p><a href="login">Logout</a></p>
+              {% else %}
+              <p><a href="login">Login</a></p>
+              {% endif %}
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+      <div class="listing-container">
+        <!-- LEFT SIDE: Image Section -->
+        <section class="image-viewer">
+            <div class="main-image-container">
+                <!-- Replace with dynamic src if you have multiple images -->
+                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="{{ listing.title }}">
+            </div>
+            <a href="/" class="close-btn">✕</a>
+        </section>
+
+        <!-- RIGHT SIDE: Details Section -->
+        <aside class="details-sidebar">
+            <div class="details-content">
+                <h1 class="listing-title">{{ listing.title }}</h1>
+                <div class="listing-price">${{ listing.price }}</div>
+                <p class="listing-meta">Listed {{ listing.date_posted }}</p>
+
+                <div class="action-buttons">
+                    <button class="btn-primary">Message</button>
+                    <button class="btn-secondary">Save</button>
+                </div>
+
+                <hr class="divider">
+
+                <div class="info-section">
+                    <h3>Details</h3>
+                    <div class="info-row">
+                        <span class="label">Condition:</span>
+                        <span class="value">{{ listing.condition }}</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="info-section">
+                    <h3>Description</h3>
+                    <p class="description-text">{{ listing.description }}</p>
+                </div>
+
+                <hr class="divider">
+
+                <div class="seller-info">
+                    <h3>Seller Information</h3>
+                    <div class="seller-card">
+                        <div class="seller-avatar"></div>
+                        <div class="seller-name">{{ listing.creator_name }}</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <main class="main-content">
+      <section class="card-grid">
+        <div class="card">
+          <div class="card-img">
+            <img src="images/nike-sneakers.jpg" alt="Product Image" />
+          </div>
+
+          <div class="card-content">
+            <div class="price">${{ listing.price }}</div>
+            <h3 class="title">{{ listing.title }} - {{ listing.condition }}</h3>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

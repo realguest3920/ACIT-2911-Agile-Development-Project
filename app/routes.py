@@ -86,6 +86,11 @@ def confirm_email(token):
     mongo["users"].update_one({"email": email}, {"$set": {"confirmed": True}})
     return "successfully verified email"
 
+@app.route("/listings/<int:item_id>")
+def listing(item_id):
+    listingsDB = mongo["Listings"]
+    listing = listingsDB.find_one({"_id" : item_id})
+    return render_template('listing.html', listing=listing)
 
 @app.route('/logout')
 def logout():

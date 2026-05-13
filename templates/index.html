@@ -48,15 +48,14 @@
         {% for listing in listings %}
         <div class="card">
           <div class="card-img">
-            <img src="images/nike-sneakers.jpg" alt="Product Image" />
+            <img src="{{ listing.imgurl }}">
           </div>
 
-            <div class="card-content">
-              <div class="price">${{ listing.price }}</div>
-              <h3 class="title">{{ listing.title }} - {{ listing.condition }}</h3>
-            </div>
+          <div class="card-content">
+            <div class="price">${{ listing.price }}</div>
+            <h3 class="title">{{ listing.title }} - {{ listing.condition }}</h3>
           </div>
-        </a>
+        </div>
         {% endfor %}
       </section>
     </main>

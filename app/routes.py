@@ -1,7 +1,9 @@
 from datetime import datetime
+import cloudinary
+import cloudinary.uploader
 
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Mail, Message
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -41,7 +43,7 @@ def index():
     listings = list(mongo["Listings"].find())
     return render_template("index.html", listings=listings)
 
-@app.route("/create")
+@app.route("/create", methods=["GET"])
 def show_create_form():
     return render_template("create_post.html")
 
@@ -121,6 +123,11 @@ def confirm_email(token):
     mongo["users"].update_one({"email": email}, {"$set": {"confirmed": True}})
     return "successfully verified email"
 
+@app.route("/listings/<int:item_id>")
+def listing(item_id):
+    listingsDB = mongo["Listings"]
+    listing = listingsDB.find_one({"_id" : item_id})
+    return render_template('listing.html', listing=listing)
 
 @app.route("/logout")
 def logout():
@@ -157,14 +164,14 @@ def get_listing(item_id):
 @api_bp.route("/listings/create", methods=["POST"])
 def create_listing():
     listings_db = maindb["Listings"]
-    data = request.get_json()
+ 
 
-    title = data.get("title")
-    creator = data.get("creator")
-    price = data.get("price")
-    condition = data.get("condition")
-    description = data.get("description")
-
+    title = request.form.get("title")
+    creator = request.form.get("creator")
+    price = request.form.get("price")
+    condition = request.form.get("condition")
+    description = request.form.get("description")
+    image = request.files.get("imageUpload")
     if not title:
         return {"error": "Missing required field: <title>"}, 400
     if not creator:
@@ -175,6 +182,11 @@ def create_listing():
         return {"error": "Missing required field: <condition>"}, 400
     if not description:
         return {"error": "Missing required field: <description>"}, 400
+    if not image:
+        return {"error": "Missing required field: <imageUpload"}, 400
+    
+    upload_result = cloudinary.uploader.upload(image)
+    image_url = upload_result["secure_url"]
 
     new_listing = {
         "_id": find_first_number(listings_db.find({}, {"_id": 1})),
@@ -183,7 +195,7 @@ def create_listing():
         "price": price,
         "condition": condition,
         "description": description,
-        "imgurl": "?",
+        "imgurl": image_url,
         "views": 0,
         "likes": 0,
         "created_on": datetime.now(),
@@ -212,12 +224,18 @@ def update_listing(item_id):
     return {"error": "listing does not exist"}, 404
 
 
-@api_bp.route("/listings/delete/<int:item_id>", methods=["DELETE"])
+@api_bp.route("/listings/delete/<int:item_id>", methods=["POST"])
 def delete_listing(item_id):
     listings_db = maindb["Listings"]
-    listing_exists = listings_db.find_one({"_id": item_id})
-    if listing_exists:
-        listings_db.delete_one({"_id": item_id})
-        return {"success": "listing deleted"}, 200
+    listing = listings_db.find_one({"_id": item_id})
+    
+    if listing:
+        if current_user.is_authenticated and listing.get('creator') == current_user.username:
+            listings_db.delete_one({"_id": item_id})
+            flash("Listing deleted successfully!")
+        else:
+            flash("You are not authorized to delete this.")
+    else:
+        flash("Listing not found.")
 
-    return {"error": "listing does not exist"}, 404
+    return redirect(url_for("index"))

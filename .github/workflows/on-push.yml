@@ -3,7 +3,7 @@ name: Test Python Application
 
 on:
   push:
-    branches: [ "Develop", "feature/create-form" ]
+    branches: [ "Develop" ]
 
 jobs:
   build:

@@ -8,27 +8,30 @@
   <body>
     <h1>Create a New Listing</h1>
 
-    <form id="listingForm">
+    <form id="listingForm" action="{{ url_for('marketplace.create_listing') }}" method="POST" enctype="multipart/form-data">
       <input
         type="text"
         id="title"
+        name="title"
         placeholder="Item Name"
         required
       /><br /><br />
       <input
         type="text"
         id="creator"
+        name="creator"
         placeholder="Seller Name"
         required
       /><br /><br />
       <input
         type="number"
         id="price"
+        name="price"
         placeholder="Price"
         required
       /><br /><br />
 
-      <select id="condition" required>
+      <select id="condition" name="condition" required>
         <option value="">--Select Condition--</option>
         <option value="New">New</option>
         <option value="Used">Used</option></select
@@ -36,48 +39,19 @@
 
       <textarea
         id="description"
+        name="description"
         placeholder="Item Description"
         required
       ></textarea
       ><br /><br />
-
+      <label for="imageUpload">Select an image:</label>
+      <input type="file" id="imageUpload" name="imageUpload" accept="image/*" /><br /><br />
       <button type="submit">Create Listing</button>
       <a href="{{ url_for('index') }}">Cancel</a>
     </form>
 
-    <p id="responseMessage"></p>
-
-    <script>
-      document
-        .getElementById("listingForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const payload = {
-            title: document.getElementById("title").value,
-            creator: document.getElementById("creator").value,
-            price: parseFloat(document.getElementById("price").value),
-            condition: document.getElementById("condition").value,
-            description: document.getElementById("description").value,
-          };
-
-          const response = await fetch(
-            "{{ url_for('marketplace.create_listing') }}",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload),
-            },
-          );
-
-          if (response.ok) {
-            // Success! Redirect the user back to the index page
-            window.location.href = "{{ url_for('index') }}";
-          } else {
-            const result = await response.json();
-            document.getElementById("responseMessage").innerText =
-              "Error: " + result.error;
-          }
-        });
-    </script>
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %}
   </body>
 </html>

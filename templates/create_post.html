@@ -6,9 +6,29 @@
     <title>Create New Listing</title>
     <h1>Create a New Listing</h1>
 
-    <form action="{{ url_for('marketplace.create_listing') }}" method="post" enctype="multipart/form-data">
-      <label for="title">Item Name</label><br />
-      <input type="text" id="title" name="title" placeholder="Item Name" required /><br /><br />
+    <form
+      id="listingForm"
+      data-url="{{ url_for('marketplace.create_listing') }}"
+      data-redirect="{{ url_for('index') }}"
+    >
+      <input
+        type="text"
+        id="title"
+        placeholder="Item Name"
+        required
+      /><br /><br />
+      <input
+        type="text"
+        id="creator"
+        placeholder="Seller Name"
+        required
+      /><br /><br />
+      <input
+        type="number"
+        id="price"
+        placeholder="Price"
+        required
+      /><br /><br />
 
       <label for="creator">Seller Name</label><br />
       <input type="text" id="creator" name="creator" placeholder="Seller Name" required /><br /><br />
@@ -37,5 +57,8 @@
 
     <p id="responseMessage"></p>
 
-    <!-- No-JavaScript form: submits directly to the server -->
-        id="description"
+    <p>{{ current_user.username }}</p>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -219,7 +219,6 @@ def delete_listing(item_id):
     listing = listings_db.find_one({"_id": item_id})
     
     if listing:
-        # Check if current_user.username (from flask_login) matches the creator string
         if current_user.is_authenticated and listing.get('creator') == current_user.username:
             listings_db.delete_one({"_id": item_id})
             flash("Listing deleted successfully!")

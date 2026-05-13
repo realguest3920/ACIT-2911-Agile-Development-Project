@@ -190,7 +190,7 @@ def create_listing():
         "price": price,
         "condition": condition,
         "description": description,
-        "image_url" : image_url,
+        "imgurl": image_url,
         "views": 0,
         "likes": 0,
         "created_on": datetime.now(),

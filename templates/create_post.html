@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create New Listing</title>
-  </head>
-  <body>
     <h1>Create a New Listing</h1>
 
     <form
@@ -15,27 +13,28 @@
     >
       <input
         type="text"
-        id="listingTitle"
-        name="title"
+        id="title"
         placeholder="Item Name"
         required
       /><br /><br />
-
       <input
         type="text"
-        id="listingCreator"
-        name="creator"
+        id="creator"
         placeholder="Seller Name"
         required
       /><br /><br />
-
       <input
         type="number"
-        id="listingPrice"
-        name="price"
+        id="price"
         placeholder="Price"
         required
       /><br /><br />
+
+      <label for="creator">Seller Name</label><br />
+      <input type="text" id="creator" name="creator" placeholder="Seller Name" required /><br /><br />
+
+      <label for="price">Price</label><br />
+      <input type="number" id="price" name="price" placeholder="Price" required step="0.01" /><br /><br />
 
       <label for="condition">Condition</label><br />
       <select id="condition" name="condition" required>
@@ -46,22 +45,11 @@
       <br /><br />
 
       <label for="description">Description</label><br />
-      <textarea
-        id="description"
-        name="description"
-        placeholder="Item Description"
-        required
-      ></textarea>
+      <textarea id="description" name="description" placeholder="Item Description" required></textarea>
       <br /><br />
 
-      <label for="imageUpload">Select an image (required)</label><br />
-      <input
-        type="file"
-        id="imageUpload"
-        name="imageUpload"
-        accept="image/*"
-        required
-      /><br /><br />
+      <label for="imageUpload">Select an image (optional)</label><br />
+      <input type="file" id="imageUpload" name="imageUpload" accept="image/*" /><br /><br />
 
       <button type="submit">Create Listing</button>
       <a href="{{ url_for('index') }}">Cancel</a>
@@ -69,9 +57,7 @@
 
     <p id="responseMessage"></p>
 
-    {% if current_user.is_authenticated %}
-    <p>Logged in as: {{ current_user.username }}</p>
-    {% endif %}
+    <p>{{ current_user.username }}</p>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>

@@ -44,6 +44,7 @@ def index():
     return render_template("index.html", listings=listings)
 
 @app.route("/create", methods=["GET"])
+@login_required
 def show_create_form():
     return render_template("create_post.html")
 
@@ -130,6 +131,7 @@ def listing(item_id):
     return render_template('listing.html', listing=listing)
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))

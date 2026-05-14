@@ -164,45 +164,44 @@ def get_listing(item_id):
 @api_bp.route("/listings/create", methods=["POST"])
 def create_listing():
     listings_db = maindb["Listings"]
- 
 
+    # These keys must match the formData.append() keys in JS
     title = request.form.get("title")
     creator = request.form.get("creator")
     price = request.form.get("price")
     condition = request.form.get("condition")
     description = request.form.get("description")
     image = request.files.get("imageUpload")
+
+    # Validations
     if not title:
-        return {"error": "Missing required field: <title>"}, 400
-    if not creator:
-        return {"error": "Missing required field: <creator>"}, 400
-    if not price:
-        return {"error": "Missing required field: <price>"}, 400
-    if not condition:
-        return {"error": "Missing required field: <condition>"}, 400
-    if not description:
-        return {"error": "Missing required field: <description>"}, 400
+        return {"error": "Missing required field: title"}, 400
     if not image:
-        return {"error": "Missing required field: <imageUpload"}, 400
-    
-    upload_result = cloudinary.uploader.upload(image)
-    image_url = upload_result["secure_url"]
+        return {"error": "Missing required field: imageUpload"}, 400
+    # ... (rest of your validations)
 
-    new_listing = {
-        "_id": find_first_number(listings_db.find({}, {"_id": 1})),
-        "title": title,
-        "creator": creator,
-        "price": price,
-        "condition": condition,
-        "description": description,
-        "imgurl": image_url,
-        "views": 0,
-        "likes": 0,
-        "created_on": datetime.now(),
-    }
-    listings_db.insert_one(new_listing)
+    try:
+        upload_result = cloudinary.uploader.upload(image)
+        image_url = upload_result["secure_url"]
 
-    return new_listing, 201
+        new_listing = {
+            "_id": find_first_number(listings_db.find({}, {"_id": 1})),
+            "title": title,
+            "creator": creator,
+            "price": price,
+            "condition": condition,
+            "description": description,
+            "imgurl": image_url,
+            "views": 0,
+            "likes": 0,
+            "created_on": datetime.now(),
+        }
+        listings_db.insert_one(new_listing)
+        return jsonify({"message": "Success", "id": new_listing["_id"]}), 201
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+
 
 
 @api_bp.route("/listings/update/<int:item_id>", methods=["PUT"])

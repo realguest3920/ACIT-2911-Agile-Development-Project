@@ -20,18 +20,6 @@ jobs:
       - name: Test with pytest
         run: |
           uv run pytest
-  create-pull-request:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ success() }}
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Create Pull Request
-        run: gh pr create -B main -H ${{ github.ref_name }} --title "Merge ${{ github.ref_name }} into main" --body "Automatic PR from Github Actions"
         env:
           API_KEY: ${{ secrets.API_KEY }}
           API_SECRET: ${{ secrets.API_SECRET }}
@@ -45,3 +33,17 @@ jobs:
           MAIL_USE_TLS: ${{ secrets.MAIL_USE_TLS }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  create-pull-request:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ success() }}
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Create Pull Request
+        run: gh pr create -B main -H ${{ github.ref_name }} --title "Merge ${{ github.ref_name }} into main" --body "Automatic PR from Github Actions"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

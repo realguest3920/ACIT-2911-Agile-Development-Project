@@ -42,6 +42,10 @@
 
     <div class="listing-container">
       <section class="image-viewer">
+        <div
+          class="image-backdrop"
+          style="background-image: url('{{ listing.imgurl }}')"
+        ></div>
         <div class="main-image-container">
           <img src="{{ listing.imgurl }}" alt="{{ listing.title }}" />
         </div>

@@ -1,0 +1,300 @@
+* {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f0f2f5;
+  color: #1c1e21;
+  line-height: 1.6;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  color: black;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  gap: 24px;
+}
+
+.page-frame {
+  position: relative;
+  height: 600px;
+  max-width: 100%;
+  justify-content: center;
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px 24px;
+}
+
+/* Card Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* Individual Card Styling */
+.card {
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2 ease;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #f8f9fa; /* Optional: slight highlight on hover */
+  cursor: pointer;
+}
+
+.card-img {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-color: #e4e6eb;
+}
+
+.card-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 1. The main button style */
+.btn-create {
+  background-color: #28a745; /* A nice "success" green */
+  color: white;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smoothly animate color changes */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. When you hover over it */
+.btn-create:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px); /* Lifts the button slightly */
+}
+
+/* 3. When you actually click it */
+.btn-create:active {
+  background-color: #1e7e34;
+  transform: translateY(0); /* Pushes it back down */
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit; /* Keeps your text colors from turning blue */
+  display: block; /* Ensures the link takes up the full width of the card */
+}
+
+body.listing-page {
+  background-color: #f0f2f5;
+  height: 100vh;
+  overflow: hidden; /* Prevents double scrollbars */
+}
+
+.listing-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Image Section */
+.image-viewer {
+  flex: 1; /* Takes up all remaining space */
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.main-image-container img {
+  max-width: 100%;
+  max-height: 100vh;
+  object-fit: contain;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  text-decoration: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Sidebar Section */
+.details-sidebar {
+  width: 360px; /* Fixed width like FB */
+  background: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Allows content to scroll */
+  padding: 20px;
+}
+
+.listing-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.listing-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1c1e21;
+}
+
+.listing-meta {
+  font-size: 14px;
+  color: #65676b;
+  margin-top: 4px;
+}
+
+/* Buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.btn-primary {
+  flex: 1;
+  background: #0866ff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #e4e6eb;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #ced0d4;
+  margin: 20px 0;
+}
+
+/* Info Styling */
+.info-section h3 {
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  color: #65676b;
+}
+.description-text {
+  line-height: 1.5;
+  color: #1c1e21;
+}
+
+.seller-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.seller-avatar {
+  width: 40px;
+  height: 40px;
+  background: #ddd;
+  border-radius: 50%;
+}
+
+.seller-name {
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .listing-container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .image-viewer {
+    height: 50vh;
+  }
+  .details-sidebar {
+    width: 100%;
+    height: auto;
+  }
+}
+
+a,
+a:visited {
+  color: black; /* Or inherit */
+  text-decoration: none; /* Optional: removes underline */
+}

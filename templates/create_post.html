@@ -41,7 +41,9 @@
               id="listingCreator"
               name="creator"
               placeholder="Your name"
+              value="{{ current_user.username if current_user.is_authenticated else '' }}"
               required
+              readonly
             />
           </div>
         </div>

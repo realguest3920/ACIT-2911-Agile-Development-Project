@@ -129,6 +129,20 @@ def listing(item_id):
     listing = listingsDB.find_one({"_id" : item_id})
     return render_template('listing.html', listing=listing)
 
+
+@app.route('/listings/<int:item_id>/edit', methods=['GET'])
+@login_required
+def edit_listing(item_id):
+    listings_db = mongo["Listings"]
+    listing = listings_db.find_one({"_id": item_id})
+    if not listing:
+        flash("Listing not found.")
+        return redirect(url_for("index"))
+    if listing.get("creator") != current_user.username:
+        flash("You are not authorized to edit this listing.")
+        return redirect(url_for("index"))
+    return render_template("update_post.html", listing=listing)
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -202,6 +216,35 @@ def create_listing():
     except Exception as e:
         return {"error": str(e)}, 500
 
+@api_bp.route("/listings/updatepost/<int:item_id>", methods=["POST","PUT"])
+def update_post(item_id):
+    listings_db = maindb["Listings"]
+
+    listing = listings_db.find_one({"_id": item_id})
+    if not listing:
+        return {"error": "listing does not exist"}, 404
+    title = request.form.get("title")
+    price = request.form.get("price")
+    condition = request.form.get("condition")
+    description = request.form.get("description")
+    image = request.files.get("imageUpload")
+
+    # Keep existing image unless a new one is uploaded
+    image_url = listing.get("imgurl")
+    if image:
+        upload_result = cloudinary.uploader.upload(image)
+        image_url = upload_result["secure_url"]
+    updates = {
+            "title": title,
+            "price": price,
+            "condition": condition,
+            "description": description,
+            "imgurl": image_url,
+
+        }
+    if updates:
+        listings_db.update_one({"_id": item_id}, {"$set": updates})
+    return {"message": "Success"}, 200
 
 @api_bp.route("/listings/update/<int:item_id>", methods=["PUT"])
 def update_listing(item_id):

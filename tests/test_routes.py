@@ -7,7 +7,6 @@ from io import BytesIO
 from app import app
 from app import routes
 
-
 @pytest.fixture
 def flask_app(tmp_path):
     app.config["TESTING"] = True

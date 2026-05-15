@@ -40,7 +40,7 @@ def find_first_number(records):
 
 @app.route("/")
 def index():
-    listings = list(mongo["Listings"].find())
+    listings = list(mongo["Listings"].find().sort("created_on", -1))
     return render_template("index.html", listings=listings)
 
 @app.route("/create", methods=["GET"])

@@ -1,3 +1,14 @@
+// 1. Handle UI update for the file upload (Displaying the filename)
+document.getElementById("imageUpload").addEventListener("change", function () {
+  const fileName = this.files[0]?.name;
+  const label = document.getElementById("fileName");
+  if (fileName) {
+    label.textContent = fileName;
+    label.style.display = "block";
+  }
+});
+
+// 2. Handle Form Submission
 document.getElementById("listingForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -23,8 +34,7 @@ document.getElementById("listingForm").addEventListener("submit", async (e) => {
   try {
     const response = await fetch(actionUrl, {
       method: "POST",
-      // IMPORTANT: Do NOT set Content-Type header when sending FormData.
-      // The browser will set it automatically with the correct boundary.
+      // Note: Browser automatically sets the correct Content-Type for FormData
       body: formData,
     });
 
@@ -37,6 +47,7 @@ document.getElementById("listingForm").addEventListener("submit", async (e) => {
     }
   } catch (error) {
     console.error("Fetch error:", error);
+    responseMsg.style.color = "red";
     responseMsg.innerText = "Connection error. Please try again.";
   }
 });

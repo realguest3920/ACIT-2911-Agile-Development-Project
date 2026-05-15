@@ -61,6 +61,12 @@
                         <button type="submit" class="delete-btn">Delete</button>
                     </form>
                   {% endif %}
+                  {% if current_user.username == listing.creator %}
+                    <form action="{{ url_for('marketplace.update_post', item_id=listing._id) }}" method="POST">
+                       <a href="{{ url_for('edit_listing', item_id=listing._id) }}" class="delete-btn">Edit</a>
+              
+                    </form>
+                  {% endif %}
               </div>
             </div>
           </a>

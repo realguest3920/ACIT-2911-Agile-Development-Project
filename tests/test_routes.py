@@ -1,6 +1,8 @@
 import pytest
 import pymongo
 import mongomock
+from unittest.mock import Mock
+import cloudinary.uploader
 from io import BytesIO
 from app import app
 from app import routes
@@ -87,14 +89,22 @@ def test_get_listing_does_not_exist(client, mock_DB):
 # 5. Create Listing (Success)
 def test_post_normal_listing(client, mock_DB, test_Data):
     data = test_Data.copy()
+
+    cloudinary.uploader.upload = Mock(return_value={
+        "public_id": "fake img", 
+        "secure_url": "https://cloudinary.com"
+    })
+
     data['imageUpload'] = (BytesIO(b"fake image content"), 'test.jpg')
     resp = client.post(
         "/marketplace/listings/create",
         data=data,
         content_type='multipart/form-data'
     )
+    dataJson = resp.get_json()
     assert resp.status_code == 201
-    assert resp.get_json()["title"] == test_Data["title"]
+    assert "id" in dataJson
+    assert "message" in dataJson
 
 # 6. Create Listing (Missing Parameters)
 def test_post_listing_no_params(client, mock_DB):

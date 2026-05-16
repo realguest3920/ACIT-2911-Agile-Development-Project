@@ -60,7 +60,13 @@
 
           <div class="action-buttons">
             <button class="btn-primary">Message</button>
+            <form
+              action="{{ url_for('marketplace.savepost', item_id=listing._id) }}"
+              method="POST"
+           >
+  
             <button class="btn-secondary">Save</button>
+            </form>
           </div>
 
           <hr class="divider" />

@@ -60,7 +60,23 @@
 
           <div class="action-buttons">
             <button class="btn-primary">Message</button>
+            {% if current_user.is_authenticated and listing._id in current_user.watchlist %}
+            <form
+              action="{{ url_for('marketplace.unsavepost', item_id=listing._id) }}"
+              method="POST"
+           >
+          
+            <button class="btn-secondary">unSave</button>
+            </form>
+            {% else %}
+            <form
+              action="{{ url_for('marketplace.savepost', item_id=listing._id) }}"
+              method="POST"
+           >
+          
             <button class="btn-secondary">Save</button>
+            </form>
+              {%  endif %}
           </div>
 
           <hr class="divider" />

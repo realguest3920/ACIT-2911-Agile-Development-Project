@@ -94,6 +94,7 @@ def register():
                     "password_hash": hashed_password,
                     "created_at": datetime.now().strftime("%c"),
                     "confirmed": False,
+                    "watchlist": []
                 }
             )
             flash("Account created successfully! Please log in.")
@@ -206,8 +207,8 @@ def create_listing():
             "condition": condition,
             "description": description,
             "imgurl": image_url,
-            "views": 0,
             "likes": 0,
+            "views": 0,
             "created_on": datetime.now(),
         }
         listings_db.insert_one(new_listing)
@@ -269,14 +270,41 @@ def update_listing(item_id):
 def delete_listing(item_id):
     listings_db = maindb["Listings"]
     listing = listings_db.find_one({"_id": item_id})
-    
+    users_db = maindb["users"]
     if listing:
         if current_user.is_authenticated and listing.get('creator') == current_user.username:
             listings_db.delete_one({"_id": item_id})
+            users_db.update_many({}, {"$pull": {"watchlist": item_id}})
+
             flash("Listing deleted successfully!")
         else:
             flash("You are not authorized to delete this.")
     else:
         flash("Listing not found.")
 
+
     return redirect(url_for("index"))
+@api_bp.route("/listings/savepost/<int:item_id>", methods = ["POST"])
+@login_required
+def savepost(item_id):
+    users_db = maindb["users"]
+    listings_db = maindb["Listings"]
+    listing = listings_db.find_one({"_id": item_id})
+
+    
+    users_db.update_one( {"username": current_user.username},  {"$addToSet": {"watchlist": item_id}}  )
+
+    
+    return  redirect(url_for("listing", item_id=item_id))
+
+@api_bp.route("/listings/unsavepost/<int:item_id>", methods = ["POST"])
+@login_required
+def unsavepost(item_id):
+    users_db = maindb["users"]
+    listings_db = maindb["Listings"]
+    listing = listings_db.find_one({"_id": item_id})
+    
+    users_db.update_one( {"username": current_user.username},  {"$pull": {"watchlist": item_id}}  )
+    return  redirect(url_for("listing", item_id=item_id))
+
+

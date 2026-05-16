@@ -7,7 +7,7 @@ class User(UserMixin):
         self.id = str(user_data['_id'])
         self.username = user_data.get('username')
         self.password_hash = user_data.get('password_hash')
-
+        self.watchlist = user_data.get('watchlist', [])
 
     def set_password(self,password):
         self.password_hash = generate_password_hash(password)

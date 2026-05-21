@@ -94,7 +94,8 @@ def register():
                     "password_hash": hashed_password,
                     "created_at": datetime.now().strftime("%c"),
                     "confirmed": False,
-                    "watchlist": []
+                    "watchlist": [],
+                    "likedposts": []
                 }
             )
             flash("Account created successfully! Please log in.")
@@ -308,3 +309,14 @@ def unsavepost(item_id):
     return  redirect(url_for("listing", item_id=item_id))
 
 
+@app.route("/watchlist", methods = ["GET"])
+@login_required
+def watchlist():
+    listings_db = maindb["Listings"]
+    users_db=maindb["users"]
+    user = users_db.find_one({"username": current_user.username})
+    watched= user.get("watchlist",[])
+    listings = list(listings_db.find({"_id": {"$in": watched}}))
+
+   
+    return render_template("watchlist.html", listings=listings)

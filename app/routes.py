@@ -280,19 +280,21 @@ def delete_listing(item_id):
     listings_db = maindb["Listings"]
     listing = listings_db.find_one({"_id": item_id})
     users_db = maindb["users"]
-    imgdel = listing.get("image_public_id")
-    if listing:
-        if current_user.is_authenticated and listing.get('creator') == current_user.username:
-            cloudinary.uploader.destroy(imgdel)
-            listings_db.delete_one({"_id": item_id})
-            users_db.update_many({}, {"$pull": {"watchlist": item_id}})
-            
-
-            flash("Listing deleted successfully!")
-        else:
-            flash("You are not authorized to delete this.")
-    else:
+    
+    if not listing:
         flash("Listing not found.")
+        return redirect(url_for("index"))
+
+    imgdel = listing.get("image_public_id")
+    if current_user.is_authenticated and listing.get('creator') == current_user.username:
+        cloudinary.uploader.destroy(imgdel)
+        listings_db.delete_one({"_id": item_id})
+        users_db.update_many({}, {"$pull": {"watchlist": item_id}})
+
+
+        flash("Listing deleted successfully!")
+    else:
+            flash("You are not authorized to delete this.")
 
 
     return redirect(url_for("index"))

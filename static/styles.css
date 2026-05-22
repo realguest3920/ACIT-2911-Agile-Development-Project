@@ -164,7 +164,7 @@ body {
   border-radius: 6px;
   text-align: center;
   cursor: pointer;
-  border: none;
+  border: 1px solid transparent;
   text-decoration: none;
   line-height: 1.4; /* Normalizes layout heights across browser types */
   transition: all 0.2s ease;
@@ -204,7 +204,26 @@ body {
   background-color: #ccdfff;
 }
 
-/* --- 4. Shared Buttons --- */
+/* --- 4. Shared Buttons & Sidebar Action Grid --- */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+/* Layout logic to map widths cleanly inside the detail panel */
+.action-buttons > * {
+  display: flex;
+}
+
+.action-buttons .msg-wrapper {
+  flex: 2; /* Primary action grows wider */
+}
+
+.action-buttons form {
+  flex: 1; /* Secondary action stays standard size */
+}
+
 .btn-create {
   background-color: #28a745;
   color: white;
@@ -241,11 +260,17 @@ body {
   width: 100%;
   background: #0866ff;
   color: white;
-  border: none;
-  padding: 12px;
+  border: 1px solid transparent; /* Ghost border prevents height variance with regular buttons */
+  padding: 8px 0;
   border-radius: 6px;
+  font-size: medium;
   font-weight: 600;
   cursor: pointer;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1.4;
+  box-sizing: border-box;
   transition: background 0.2s ease;
 }
 
@@ -257,7 +282,7 @@ body {
   background: #e4e6eb;
   color: #1c1e21;
   border: none;
-  padding: 12px 20px;
+  padding: 8px 20px;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
@@ -269,13 +294,20 @@ body {
 }
 
 .btn-save {
+  width: 100%;
   background: #28a745;
   color: white;
-  border: none;
-  padding: 12px 20px;
+  border: 1px solid transparent;
+  padding: 8px 0;
   border-radius: 6px;
+  font-size: medium;
   font-weight: 600;
   cursor: pointer;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1.4;
+  box-sizing: border-box;
   transition: background 0.2s ease;
 }
 
@@ -284,13 +316,20 @@ body {
 }
 
 .btn-unsave {
+  width: 100%;
   background: red;
   color: white;
-  border: none;
-  padding: 12px 20px;
+  border: 1px solid transparent;
+  padding: 8px 0;
   border-radius: 6px;
+  font-size: medium;
   font-weight: 600;
   cursor: pointer;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1.4;
+  box-sizing: border-box;
   transition: background 0.2s ease;
 }
 
@@ -372,11 +411,6 @@ body {
   margin-bottom: 15px;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 10px;
-  margin: 20px 0;
-}
 .divider {
   border: 0;
   border-top: 1px solid #ced0d4;

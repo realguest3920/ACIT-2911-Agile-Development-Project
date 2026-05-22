@@ -292,7 +292,8 @@ def delete_listing(item_id):
 
     imgdel = listing.get("image_public_id")
     if current_user.is_authenticated and listing.get('creator') == current_user.username:
-        cloudinary.uploader.destroy(imgdel)
+        if imgdel:
+            cloudinary.uploader.destroy(imgdel)
         listings_db.delete_one({"_id": item_id})
         users_db.update_many({}, {"$pull": {"watchlist": item_id}})
 

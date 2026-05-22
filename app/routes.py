@@ -188,6 +188,7 @@ def create_listing():
     condition = request.form.get("condition")
     description = request.form.get("description")
     image = request.files.get("imageUpload")
+    
 
     # Validations
     if not title:
@@ -199,6 +200,7 @@ def create_listing():
     try:
         upload_result = cloudinary.uploader.upload(image)
         image_url = upload_result["secure_url"]
+        image_public_id = upload_result["public_id"]
 
         new_listing = {
             "_id": find_first_number(listings_db.find({}, {"_id": 1})),
@@ -208,6 +210,7 @@ def create_listing():
             "condition": condition,
             "description": description,
             "imgurl": image_url,
+            "image_public_id" : image_public_id,
             "likes": 0,
             "views": 0,
             "created_on": datetime.now(),
@@ -230,20 +233,25 @@ def update_post(item_id):
     condition = request.form.get("condition")
     description = request.form.get("description")
     image = request.files.get("imageUpload")
-
+    image_public_id = listing.get("image_public_id")
     # Keep existing image unless a new one is uploaded
     image_url = listing.get("imgurl")
     if image:
         upload_result = cloudinary.uploader.upload(image)
+        if image_public_id:
+            cloudinary.uploader.destroy(image_public_id)
         image_url = upload_result["secure_url"]
+        image_public_id = upload_result["public_id"]
+        
     updates = {
-            "title": title,
-            "price": price,
-            "condition": condition,
-            "description": description,
-            "imgurl": image_url,
+        "title": title,
+        "price": price,
+        "condition": condition,
+        "description": description,
+        "imgurl": image_url,
+        "image_public_id" : image_public_id 
 
-        }
+            }
     if updates:
         listings_db.update_one({"_id": item_id}, {"$set": updates})
     return {"message": "Success"}, 200
@@ -252,7 +260,7 @@ def update_post(item_id):
 def update_listing(item_id):
     listings_db = maindb["Listings"]
     data = request.get_json()
-
+    
     listing = listings_db.find_one({"_id": item_id})
     if listing:
         for key in data.keys():
@@ -272,16 +280,21 @@ def delete_listing(item_id):
     listings_db = maindb["Listings"]
     listing = listings_db.find_one({"_id": item_id})
     users_db = maindb["users"]
-    if listing:
-        if current_user.is_authenticated and listing.get('creator') == current_user.username:
-            listings_db.delete_one({"_id": item_id})
-            users_db.update_many({}, {"$pull": {"watchlist": item_id}})
-
-            flash("Listing deleted successfully!")
-        else:
-            flash("You are not authorized to delete this.")
-    else:
+    
+    if not listing:
         flash("Listing not found.")
+        return redirect(url_for("index"))
+
+    imgdel = listing.get("image_public_id")
+    if current_user.is_authenticated and listing.get('creator') == current_user.username:
+        cloudinary.uploader.destroy(imgdel)
+        listings_db.delete_one({"_id": item_id})
+        users_db.update_many({}, {"$pull": {"watchlist": item_id}})
+
+
+        flash("Listing deleted successfully!")
+    else:
+            flash("You are not authorized to delete this.")
 
 
     return redirect(url_for("index"))

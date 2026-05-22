@@ -17,31 +17,33 @@
   <body>
     <header class="site-header">
       <div class="header-container">
-        <h1>Marketplace</h1>
+        <h1>
+          <a href="/" class="header-logo-link">Marketplace</a>
+        </h1>
 
         <nav class="navbar">
           <ul>
+            <!-- 1. If authenticated, render each button in its own list item -->
+            {% if current_user.is_authenticated %}
             <li>
-              {% if current_user.is_authenticated %}
-              <div class="button-wrapper">
-                <a href="{{ url_for('show_create_form') }}">
-                  <button type="button" class="btn-create">Create</button>
-                </a>
-              </div>
-              <div class="button-wrapper">
-                <a href="{{ url_for('watchlist') }}">
-                  <button type="button" class="btn-create">Watchlist</button>
-                </a>
-              </div>
-              {% endif %}
+              <a href="{{ url_for('show_create_form') }}">
+                <button type="button" class="btn-create">Create</button>
+              </a>
             </li>
+            <li>
+              <a href="{{ url_for('watchlist') }}">
+                <button type="button" class="btn-watchlist">Watchlist</button>
+              </a>
+            </li>
+            {% endif %}
+
+            <!-- 2. The rest of your regular text links -->
             <li><a href="/">Listings</a></li>
-            <li>About</li>
             <li>
               {% if current_user.is_authenticated %}
-              <p><a href="{{ url_for('logout') }}">Logout</a></p>
+              <a href="{{ url_for('logout') }}">Logout</a>
               {% else %}
-              <p><a href="{{ url_for('login') }}">Login</a></p>
+              <a href="{{ url_for('login') }}">Login</a>
               {% endif %}
             </li>
           </ul>

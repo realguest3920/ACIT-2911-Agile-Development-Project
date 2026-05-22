@@ -32,6 +32,18 @@ body {
   align-items: center;
 }
 
+/* Style the header link so it inherits the white color and removes the underline */
+.header-logo-link {
+  text-decoration: none;
+  color: inherit; /* Inherits the white (#ffffff) color from .site-header */
+  cursor: pointer;
+}
+
+/* Optional: Add a subtle hover effect if you want users to know it's interactive */
+.header-logo-link:hover {
+  opacity: 0.9;
+}
+
 .navbar ul {
   display: flex;
   list-style: none;
@@ -204,6 +216,22 @@ body {
 
 .btn-create:hover {
   background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.btn-watchlist {
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 22px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-watchlist:hover {
+  background-color: #3b82f6;
   transform: translateY(-1px);
 }
 

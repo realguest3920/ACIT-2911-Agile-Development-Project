@@ -69,17 +69,34 @@
               action="{{ url_for('marketplace.unsavepost', item_id=listing._id) }}"
               method="POST"
             >
-              <button class="btn-secondary">unSave</button>
+              <button class="btn-unsave">Unsave</button>
             </form>
             {% else %}
             <form
               action="{{ url_for('marketplace.savepost', item_id=listing._id) }}"
               method="POST"
             >
-              <button class="btn-secondary">Save</button>
+              <button class="btn-save">Save</button>
             </form>
             {% endif %}
           </div>
+
+          {% if current_user.username == listing.creator %}
+          <div class="card-actions">
+            <form
+              action="{{ url_for('marketplace.delete_listing', item_id=listing._id) }}"
+              method="POST"
+            >
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+
+            <a
+              href="{{ url_for('edit_listing', item_id=listing._id) }}"
+              class="edit-btn"
+              >Edit</a
+            >
+          </div>
+          {% endif %}
 
           <hr class="divider" />
 

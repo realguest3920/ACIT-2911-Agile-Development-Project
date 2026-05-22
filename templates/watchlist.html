@@ -17,7 +17,9 @@
   <body>
     <header class="site-header">
       <div class="header-container">
-        <h1>Marketplace</h1>
+        <h1>
+          <a href="/" class="header-logo-link">Marketplace</a>
+        </h1>
 
         <nav class="navbar">
           <ul>
@@ -31,7 +33,6 @@
               {% endif %}
             </li>
             <li><a href="/">Listings</a></li>
-            <li>About</li>
             <li>
               {% if current_user.is_authenticated %}
               <p><a href="{{ url_for('logout') }}">Logout</a></p>

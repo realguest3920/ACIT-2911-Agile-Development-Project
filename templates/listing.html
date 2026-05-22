@@ -27,7 +27,6 @@
         <nav class="navbar">
           <ul>
             <li><a href="/">Listings</a></li>
-            <li>About</li>
             <li>
               {% if current_user.is_authenticated %}
               <p><a href="{{ url_for('logout') }}">Logout</a></p>
@@ -60,23 +59,22 @@
 
           <div class="action-buttons">
             <button class="btn-primary">Message</button>
-            {% if current_user.is_authenticated and listing._id in current_user.watchlist %}
+            {% if current_user.is_authenticated and listing._id in
+            current_user.watchlist %}
             <form
               action="{{ url_for('marketplace.unsavepost', item_id=listing._id) }}"
               method="POST"
-           >
-          
-            <button class="btn-secondary">unSave</button>
+            >
+              <button class="btn-secondary">unSave</button>
             </form>
             {% else %}
             <form
               action="{{ url_for('marketplace.savepost', item_id=listing._id) }}"
               method="POST"
-           >
-          
-            <button class="btn-secondary">Save</button>
+            >
+              <button class="btn-secondary">Save</button>
             </form>
-              {%  endif %}
+            {% endif %}
           </div>
 
           <hr class="divider" />

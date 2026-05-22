@@ -129,7 +129,12 @@ def confirm_email(token):
 def listing(item_id):
     listingsDB = mongo["Listings"]
     listing = listingsDB.find_one({"_id" : item_id})
-    return render_template('listing.html', listing=listing)
+    creator_email = None
+    if listing:
+        creator = listing.get("creator")
+        user_data = mongo["users"].find_one({"username": creator})
+        creator_email = user_data.get("email") if user_data else None
+    return render_template('listing.html', listing=listing, creator_email=creator_email)
 
 
 @app.route('/listings/<int:item_id>/edit', methods=['GET'])

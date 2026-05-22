@@ -58,7 +58,11 @@
           <p class="listing-meta">Listed {{ listing.date_posted }}</p>
 
           <div class="action-buttons">
-            <button class="btn-primary">Message</button>
+            {% if creator_email %}
+            <a href="mailto:{{ creator_email }}?subject=Question about: {{ listing.title }}" class="btn-primary" style="text-decoration: none; display: inline-block;">Message</a>
+            {% else %}
+            <button class="btn-primary" disabled>Message</button>
+            {% endif %}
             {% if current_user.is_authenticated and listing._id in
             current_user.watchlist %}
             <form
